@@ -11,6 +11,10 @@ function centerCanvas() {
 	background(0);
 }
 
+function preload(){
+	petres = loadImage('./petres.jpg')
+}
+
 function setup() {
 	centerCanvas();
 }
@@ -31,6 +35,7 @@ function draw() {
 
 	rect(paddleLX, paddleLY, paddleWidth, paddleHeight);
 	rect(paddleRX, paddleRY, paddleWidth, paddleHeight);
+	image(petres, w/2-50, h/2-50, 100, 100)
 }
 
 function windowResized() {
