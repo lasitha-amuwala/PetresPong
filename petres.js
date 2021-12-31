@@ -107,6 +107,8 @@ class Ball {
 		this.pos.x += this.maxSpeed.x * this.acc.x;
 		this.pos.y += this.maxSpeed.y * this.acc.y;
 
-
+		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
+			this.acc.y = -this.acc.y;
+		}
 	}
 }
