@@ -1,6 +1,42 @@
 let ball;
 let player1;
 let player2;
+let twoPlayer = true;
+
+function preload() {
+	petres = loadImage('./petres.jpg');
+}
+
+function setup() {
+	centerCanvas();
+}
+
+function draw() {
+	background(0);
+
+	let w = width;
+	let h = height;
+
+	/* Draw net */
+	stroke(255);
+	for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
+
+	/* draw player 1 paddle */
+	player1.update();
+	player1.show();
+
+	//* draw player 2 paddle */
+	player2.update();
+	player2.show();
+
+	/* draw ball */
+	ball.show();
+	ball.move();
+}
+
+function windowResized() {
+	centerCanvas();
+}
 
 function centerCanvas() {
 	let winWidth = windowHeight - 100;
@@ -22,56 +58,38 @@ function centerCanvas() {
 	background(0);
 }
 
-function preload() {
-	petres = loadImage('./petres.jpg');
-}
-
-function setup() {
-	centerCanvas();
-}
-
-function draw() {
-	background(0);
-	let w = width;
-	let h = height;
-
-	/* Draw net */
-	stroke(255);
-	for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
-
-	ball.show();
-	player1.show();
-	player2.show();
-	ball.move();
-}
-
-function windowResized() {
-	centerCanvas();
-}
-
 function keyPressed() {
-	if ( keyCode == UP_ARROW) {
-		console.log('up')
-		player1.up();
-	}
+	if (key == 'w' || key == 'W') player1.up();
+	if (key == 's' || key == 'S') player1.down();
+	if (twoPlayer && keyCode == UP_ARROW) player2.up();
+	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
+}
+
+function keyReleased() {
+	if (key == 'w' || key == 'W' || key == 's' || key == 'S') player1.stop();
+	if (twoPlayer && (keyCode == UP_ARROW || keyCode == DOWN_ARROW))
+		player2.stop();
 }
 
 class Player {
 	constructor(x, y) {
 		this.w = width * 0.005;
 		this.h = height * 0.15;
-		this.x = x;
-		this.y = y;
-		this.acc = createVector(0,0);
+		this.pos = createVector(x, y);
+		this.acc = createVector(0, 0);
 		this.spd = 10;
+		this.maxSpd = 10;
 	}
 
-	show() {
-		rect(this.x, this.y, this.w, this.h);
-	}
+	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);
+	up = () => (this.acc.y -= this.spd);
+	down = () => (this.acc.y += this.spd);
+	stop = () => (this.acc.y = 0);
 
-	up() {
-		this.acc -= this.spd;
+	update() {
+		this.acc.y = constrain(this.acc.y, -this.maxSpd, this.maxSpd);
+		this.pos.add(this.acc);
+		this.pos.y = constrain(this.pos.y, 0, height - this.h);
 	}
 }
 
@@ -79,25 +97,16 @@ class Ball {
 	constructor() {
 		this.pos = createVector(width / 2, height / 2);
 		this.r = 50;
-		this.maxSpeed = createVector(20, 15);
+		this.maxSpeed = createVector(7, 7);
 		this.acc = p5.Vector.random2D();
 	}
 
-	show() {
-		circle(this.pos.x, this.pos.y, this.r);
-	}
+	show = () => circle(this.pos.x, this.pos.y, this.r);
 
 	move() {
-		this.pos.x += 5 * this.acc.x;
+		this.pos.x += this.maxSpeed.x * this.acc.x;
+		this.pos.y += this.maxSpeed.y * this.acc.y;
+
+
 	}
 }
-
-/**
- * 	 Draw Paddles
-	let paddleWidth = w * 0.005;
-	let paddleHeight = h * 0.15;
-	let paddleLX = w - w * 0.98;
-	let paddleRX = w - w * 0.02 - paddleWidth;
-	let paddleLY = h / 2 - paddleHeight / 2;
-	let paddleRY = h / 2 - paddleHeight / 2;
- */
