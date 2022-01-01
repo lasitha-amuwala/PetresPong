@@ -2,12 +2,14 @@ let ball;
 let player1;
 let player2;
 let twoPlayer = true;
+let petres;
 
 function preload() {
-	petres = loadImage('./petres.jpg');
+	petres = loadImage('./petres-ball.png');
 }
 
 function setup() {
+
 	centerCanvas();
 }
 
@@ -54,7 +56,7 @@ function centerCanvas() {
 
 	let w = width;
 	let h = height;
-	ball = new Ball();
+	ball = new Ball(petres);
 	player1 = new Player(w - w * 0.98, h / 2 - (h * 0.15) / 2);
 	player2 = new Player(w - w * 0.02 - w * 0.005, h / 2 - (h * 0.15) / 2);
 

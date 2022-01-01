@@ -1,12 +1,17 @@
 class Ball {
-	constructor() {
+	constructor(img) {
 		this.pos = createVector(width / 2, height / 2);
-		this.r = 25;
-		this.maxSpeed = createVector(10, 10);
+		this.r = 75;
+		this.maxSpeed = createVector(7, 7);
 		this.acc = p5.Vector.random2D();
+		this.img = img;
 	}
 
-	show = () => circle(this.pos.x, this.pos.y, this.r);
+	//show = () => circle(this.pos.x, this.pos.y, this.r);
+	show = () => {
+		imageMode(CENTER);
+		image(this.img, this.pos.x, this.pos.y, this.r, this.r);
+	};
 
 	edges() {
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
@@ -24,7 +29,6 @@ class Ball {
 			: this.pos.x <= p.pos.x + this.r / 2 + p.w;
 
 		if (sideCheck / 2 && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
-			console.log('yes');
 			this.acc.x = -this.acc.x;
 		}
 	}
