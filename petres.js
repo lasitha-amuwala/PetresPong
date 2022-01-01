@@ -11,7 +11,7 @@ function preload() {
 }
 
 function setup() {
-	MODE = 1;
+	MODE = 0;
 	twoPlayer = true;
 	centerCanvas();
 }
