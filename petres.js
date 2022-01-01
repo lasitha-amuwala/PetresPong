@@ -1,42 +1,56 @@
 let ball;
 let player1;
 let player2;
-let twoPlayer = true;
-let petres;
+
+let petresBall;
+let twoPlayer;
+let MODE;
 
 function preload() {
-	petres = loadImage('./petres-ball.png');
+	petresBall = loadImage('./petres-ball.png');
 }
 
 function setup() {
-
+	MODE = 1;
+	twoPlayer = true;
 	centerCanvas();
 }
 
 function draw() {
-	background(0);
-
 	let w = width;
 	let h = height;
 
-	/* Draw net */
-	stroke(255);
-	for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
+	background(0);
 
-	/* draw player 1 paddle */
-	player1.update();
-	player1.show();
+	if (MODE == 0) {
+		fill(256);
+		textAlign(CENTER, CENTER);
+		textSize(60);
+		text('Petres Pong', w / 2, h / 2);
+		textSize(20);
+		text('Press Enter to Start', w / 2, h / 2 + 100);
+	} else if (MODE == 1) {
+		/* Draw net */
+		stroke(255);
+		for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
 
-	//* draw player 2 paddle */
-	player2.update();
-	player2.show();
+		/* draw player 1 paddle */
+		player1.update();
+		player1.show();
 
-	/* draw ball */
-	ball.show();
-	ball.edges();
-	ball.move();
-	ball.paddleCollision(player1, 0);
-	ball.paddleCollision(player2, 1);
+		//* draw player 2 paddle */
+		player2.update();
+		player2.show();
+
+		/* draw ball */
+		ball.show();
+		ball.edges();
+		ball.move();
+		ball.paddleCollision(player1, 0);
+		ball.paddleCollision(player2, 1);
+
+		drawScores();
+	}
 }
 
 function windowResized() {
@@ -56,7 +70,8 @@ function centerCanvas() {
 
 	let w = width;
 	let h = height;
-	ball = new Ball(petres);
+
+	ball = new Ball(petresBall);
 	player1 = new Player(w - w * 0.98, h / 2 - (h * 0.15) / 2);
 	player2 = new Player(w - w * 0.02 - w * 0.005, h / 2 - (h * 0.15) / 2);
 
@@ -66,6 +81,7 @@ function centerCanvas() {
 function keyPressed() {
 	if (key == 'w' || key == 'W') player1.goUp();
 	if (key == 's' || key == 'S') player1.down();
+	if (keyCode == ENTER) MODE = 1;
 	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
 	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
 }
@@ -76,3 +92,10 @@ function keyReleased() {
 		player2.stop();
 }
 
+function drawScores() {
+	fill(256);
+	textSize(24);
+	textAlign(CENTER)
+	text(player1.score, width / 2 - 50, 50);
+	text(player2.score, width / 2 + 50, 50);
+}

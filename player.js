@@ -6,12 +6,14 @@ class Player {
 		this.acc = createVector(0, 0);
 		this.spd = 10;
 		this.maxSpd = 10;
+		this.score = 0;
 	}
 
 	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);
 	goUp = () => (this.acc.y -= this.spd);
 	down = () => (this.acc.y += this.spd);
 	stop = () => (this.acc.y = 0);
+	incScore = () => (this.score += 1);
 
 	update() {
 		this.acc.y = constrain(this.acc.y, -this.maxSpd, this.maxSpd);

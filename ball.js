@@ -13,7 +13,7 @@ class Ball {
 		image(this.img, this.pos.x, this.pos.y, this.r, this.r);
 	};
 
-	edges() {
+	edges(p) {
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
 			this.acc.y = -this.acc.y;
 		}
@@ -35,6 +35,6 @@ class Ball {
 
 	move() {
 		this.pos.x += this.maxSpeed.x * this.acc.x;
-		this.pos.y += this.maxSpeed.y * this.acc.y;
+		this.pos.y += this.maxSpeed.y * this.acc.y;    
 	}
 }
