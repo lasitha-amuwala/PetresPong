@@ -31,7 +31,10 @@ function draw() {
 
 	/* draw ball */
 	ball.show();
+	ball.edges();
 	ball.move();
+	ball.paddleCollision(player1, 0);
+	ball.paddleCollision(player2, 1);
 }
 
 function windowResized() {
@@ -59,9 +62,9 @@ function centerCanvas() {
 }
 
 function keyPressed() {
-	if (key == 'w' || key == 'W') player1.up();
+	if (key == 'w' || key == 'W') player1.goUp();
 	if (key == 's' || key == 'S') player1.down();
-	if (twoPlayer && keyCode == UP_ARROW) player2.up();
+	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
 	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
 }
 
@@ -71,44 +74,3 @@ function keyReleased() {
 		player2.stop();
 }
 
-class Player {
-	constructor(x, y) {
-		this.w = width * 0.005;
-		this.h = height * 0.15;
-		this.pos = createVector(x, y);
-		this.acc = createVector(0, 0);
-		this.spd = 10;
-		this.maxSpd = 10;
-	}
-
-	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);
-	up = () => (this.acc.y -= this.spd);
-	down = () => (this.acc.y += this.spd);
-	stop = () => (this.acc.y = 0);
-
-	update() {
-		this.acc.y = constrain(this.acc.y, -this.maxSpd, this.maxSpd);
-		this.pos.add(this.acc);
-		this.pos.y = constrain(this.pos.y, 0, height - this.h);
-	}
-}
-
-class Ball {
-	constructor() {
-		this.pos = createVector(width / 2, height / 2);
-		this.r = 50;
-		this.maxSpeed = createVector(7, 7);
-		this.acc = p5.Vector.random2D();
-	}
-
-	show = () => circle(this.pos.x, this.pos.y, this.r);
-
-	move() {
-		this.pos.x += this.maxSpeed.x * this.acc.x;
-		this.pos.y += this.maxSpeed.y * this.acc.y;
-
-		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
-			this.acc.y = -this.acc.y;
-		}
-	}
-}
