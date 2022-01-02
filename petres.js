@@ -56,6 +56,7 @@ function keyPressed() {
 	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
 	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
 }
+
 function draw() {
 	//reset background every frame
 	background(0);
@@ -110,6 +111,13 @@ function draw() {
 		text('Press enter to play again', w / 2, h / 2 + 100);
 
 		initPlayers();
+	}
+}
+
+function checkAngle() {
+	while (true) {
+		vector = p5.Vector.random2D();
+		console.log(vector);
 	}
 }
 

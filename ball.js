@@ -1,10 +1,11 @@
 class Ball {
 	constructor(img) {
 		this.pos = createVector(width / 2, height / 2);
-		this.r = 75;
-		this.maxSpeed = createVector(7, 7);
+		this.r = w * 0.05;
+		this.maxSpeed = createVector(5, 5);
 		this.acc = p5.Vector.random2D();
 		this.img = img;
+		this.firstBounce = false;
 	}
 
 	//show = () => circle(this.pos.x, this.pos.y, this.r);
@@ -31,6 +32,10 @@ class Ball {
 
 		if (sideCheck / 2 && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
 			this.acc.x = -this.acc.x;
+			if (!this.firstBounce) {
+				this.firstBounce = true;
+				this.maxSpeed = createVector(10, 10);
+			}
 		}
 	}
 
