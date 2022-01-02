@@ -7,23 +7,27 @@ class Ball {
 		this.acc = this.randomAngle();
 		this.img = img;
 	}
-
+	/* display petres ball */
 	show() {
 		imageMode(CENTER);
 		image(this.img, this.pos.x, this.pos.y, this.r, this.r);
 	}
 
+	/* move ball based on speed and acceleration angle */
 	move() {
 		this.pos.x += this.speed.x * this.acc.x;
 		this.pos.y += this.speed.y * this.acc.y;
 	}
 
+	/* generate an angle between a restricted area */
 	randomAngle() {
 		let angle = random([0, 1]) ? random(-45, 45) : random(135, 225);
 		return p5.Vector.fromAngle(radians(angle));
 	}
 
+	/* ceiling and floor collisions */
 	edges() {
+		// 
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2)
 			this.acc.y = -this.acc.y;
 		if (this.pos.x <= 0 || this.pos.x >= width) {

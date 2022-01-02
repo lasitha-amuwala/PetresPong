@@ -10,11 +10,16 @@ class Player {
 	}
 
 	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);
+	// move paddle up
 	goUp = () => (this.acc.y -= this.spd);
+	// move paddle down
 	down = () => (this.acc.y += this.spd);
+	// stop moving paddle
 	stop = () => (this.acc.y = 0);
+	// incremenet player score
 	incScore = () => (this.score += 1);
 
+	// update paddle position
 	update() {
 		this.acc.y = constrain(this.acc.y, -this.maxSpd, this.maxSpd);
 		this.pos.add(this.acc);
