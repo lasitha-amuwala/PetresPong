@@ -2,16 +2,25 @@ class Ball {
 	constructor(img) {
 		this.pos = createVector(width / 2, height / 2);
 		this.r = w * 0.05;
-		this.maxSpeed = createVector(5, 5);
-		this.acc = p5.Vector.random2D();
+		this.speed = createVector(5, 5);
+		this.maxSpeed = createVector(10, 10);
+		this.acc = this.randomAngle();
 		this.img = img;
-		this.firstBounce = false;
 	}
 
-	//show = () => circle(this.pos.x, this.pos.y, this.r);
 	show() {
 		imageMode(CENTER);
 		image(this.img, this.pos.x, this.pos.y, this.r, this.r);
+	}
+
+	move() {
+		this.pos.x += this.speed.x * this.acc.x;
+		this.pos.y += this.speed.y * this.acc.y;
+	}
+
+	randomAngle() {
+		let angle = random([0, 1]) ? random(-45, 45) : random(135, 225);
+		return p5.Vector.fromAngle(radians(angle));
 	}
 
 	edges() {
@@ -19,7 +28,7 @@ class Ball {
 			this.acc.y = -this.acc.y;
 		if (this.pos.x <= 0 || this.pos.x >= width) {
 			let currPos = this.pos.x;
-			this.acc = p5.Vector.random2D();
+			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
 			return currPos <= 0 ? 0 : 1;
 		}
@@ -32,15 +41,9 @@ class Ball {
 
 		if (sideCheck / 2 && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
 			this.acc.x = -this.acc.x;
-			if (!this.firstBounce) {
-				this.firstBounce = true;
-				this.maxSpeed = createVector(10, 10);
-			}
+			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
+				this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
 		}
 	}
-
-	move() {
-		this.pos.x += this.maxSpeed.x * this.acc.x;
-		this.pos.y += this.maxSpeed.y * this.acc.y;
-	}
 }
+//show = () => circle(this.pos.x, this.pos.y, this.r);

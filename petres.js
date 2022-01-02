@@ -73,6 +73,7 @@ function draw() {
 
 	if (mode == 1) {
 		/* Display Game */
+		//console.log(p5.Vector.fromAngle(radians(180)));
 		//Draw net
 		stroke(255);
 		for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
@@ -90,8 +91,8 @@ function draw() {
 		ball.move();
 		ball.paddleCollision(player1, 0);
 		ball.paddleCollision(player2, 1);
+		
 		let score = ball.edges();
-
 		if (score !== undefined) score ? player1.incScore() : player2.incScore();
 
 		// draw score board
@@ -111,13 +112,6 @@ function draw() {
 		text('Press enter to play again', w / 2, h / 2 + 100);
 
 		initPlayers();
-	}
-}
-
-function checkAngle() {
-	while (true) {
-		vector = p5.Vector.random2D();
-		console.log(vector);
 	}
 }
 
