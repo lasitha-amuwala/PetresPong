@@ -4,7 +4,7 @@ let petresBall;
 let twoPlayer;
 let w, h;
 let playAgain = false;
-const ROUNDS = 5;
+const ROUNDS = 10;
 
 /* setup image */
 function preload() {
