@@ -34,6 +34,7 @@ class Ball {
 			let currPos = this.pos.x;
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
+			this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
 			return currPos <= 0 ? 0 : 1;
 		}
 	}
@@ -46,7 +47,7 @@ class Ball {
 		if (sideCheck / 2 && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
 			this.acc.x = -this.acc.x;
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
-				this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
+				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
 		}
 	}
 }
