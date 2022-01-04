@@ -21,35 +21,52 @@ class Ball {
 
 	/* generate an angle between a restricted area */
 	randomAngle() {
+		// angle between -45 to 45 degrees, or 135 to 225 degrees
 		let angle = random([0, 1]) ? random(-45, 45) : random(135, 225);
 		return p5.Vector.fromAngle(radians(angle));
 	}
 
 	/* ceiling and floor collisions */
 	edges() {
-		//
+		// invert vertical acceleration when ball collides with floor or ceiling
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2)
 			this.acc.y = -this.acc.y;
+
+		// when ball collides with left or right wall
 		if (this.pos.x <= 0 || this.pos.x >= width) {
 			let currPos = this.pos.x;
+
+			// reset ball position and angle
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
+
+			// increase ball speed when collides with left and right wall
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
 				this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
+
+			// return which side ball collided with, 0 = left, 1 = right
 			return currPos <= 0 ? 0 : 1;
 		}
 	}
 
+	/* collisions with paddle */
 	paddleCollision(p, d) {
-		let sideCheck = d
+		// check which paddle, left or right
+		let paddleCheck = d
 			? this.pos.x >= p.pos.x - this.r / 2 - p.w
 			: this.pos.x <= p.pos.x + this.r / 2 + p.w;
 
-		if (sideCheck / 2 && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
+		// if ball hits paddle invert ball horizontal acceleration
+		if (
+			paddleCheck / 2 &&
+			this.pos.y >= p.pos.y &&
+			this.pos.y <= p.pos.y + p.h
+		) {
 			this.acc.x = -this.acc.x;
+
+			// increase ball speed when ball hits paddle
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
 				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
 		}
 	}
 }
-//show = () => circle(this.pos.x, this.pos.y, this.r);

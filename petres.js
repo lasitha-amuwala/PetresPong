@@ -80,7 +80,7 @@ function draw() {
 
 	if (mode == 1) {
 		/* Display Game */
-		//Draw net
+		// Draw net
 		stroke(255);
 		for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
 
@@ -119,7 +119,7 @@ function draw() {
 		// display scores
 		textSize(20);
 		text('Press enter to play again', w / 2, h / 2 + 100);
-		//reset players
+		// reset players
 		initPlayers();
 	}
 }
