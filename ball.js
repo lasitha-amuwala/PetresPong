@@ -27,14 +27,15 @@ class Ball {
 
 	/* ceiling and floor collisions */
 	edges() {
-		// 
+		//
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2)
 			this.acc.y = -this.acc.y;
 		if (this.pos.x <= 0 || this.pos.x >= width) {
 			let currPos = this.pos.x;
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
-			this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
+			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
+				this.speed = createVector(this.speed.x + 1, this.speed.y + 1);
 			return currPos <= 0 ? 0 : 1;
 		}
 	}
