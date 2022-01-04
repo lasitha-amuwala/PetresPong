@@ -52,18 +52,16 @@ class Ball {
 	/* collisions with paddle */
 	paddleCollision(p, d) {
 		// check which paddle, left or right
-		let paddleCheck = d
+		let checkPaddle = d
 			? this.pos.x >= p.pos.x - this.r / 2 - p.w
 			: this.pos.x <= p.pos.x + this.r / 2 + p.w;
 
-		// if ball hits paddle invert ball horizontal acceleration
-		if (
-			paddleCheck / 2 &&
-			this.pos.y >= p.pos.y &&
-			this.pos.y <= p.pos.y + p.h
-		) {
-			this.acc.x = -this.acc.x;
-
+		if (checkPaddle && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
+			// only invert acceleration if the ball is coming toward the paddle
+			// prevents invert accleration if paddle is hit from behind and prevents ball getting stuck on paddle
+			if ((d && this.acc.x > 0) || (!d && this.acc.x < 0))
+				// invert ball horizontal acceleration
+				this.acc.x = -this.acc.x;
 			// increase ball speed when ball hits paddle
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
 				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
