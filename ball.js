@@ -3,7 +3,7 @@ class Ball {
 		this.pos = createVector(width / 2, height / 2);
 		this.r = w * 0.05;
 		this.speed = createVector(5, 5);
-		this.maxSpeed = createVector(7, 7);
+		this.maxSpeed = createVector(10, 10);
 		this.acc = this.randomAngle();
 		this.img = img;
 	}
@@ -22,7 +22,7 @@ class Ball {
 	/* generate an angle between a restricted area */
 	randomAngle() {
 		// angle between -45 to 45 degrees, or 135 to 225 degrees
-		let angle = random([0, 1]) ? random(-45, 45) : random(135, 225);
+		let angle = random([0, 1]) ? random(-65, 65) : random(155, 245);
 		return p5.Vector.fromAngle(radians(angle));
 	}
 
