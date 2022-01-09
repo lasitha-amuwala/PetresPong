@@ -20,4 +20,5 @@ body::before{
 
 canvas{
   opacity: 0.95;
+  border-radius: 15px;
 }
