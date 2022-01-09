@@ -1,5 +1,8 @@
 let mode;
 let ball, player1, player2;
+let paddleSound;
+let wallSound;
+let goalSound;
 let petresBall;
 let twoPlayer;
 let w, h;
@@ -8,7 +11,10 @@ const ROUNDS = 10;
 
 /* setup image */
 function preload() {
-	petresBall = loadImage('./petres-ball.png');
+	petresBall = loadImage('assets/petres-ball.png');
+	paddleSound = loadSound('assets/paddleSound.mp3');
+	wallSound = loadSound('assets/wallSound.mp3');
+	goalSound = loadSound('assets/goalSound.mp3');
 }
 
 /* setup canvas */
@@ -21,7 +27,7 @@ function setup() {
 	centerCanvas();
 	initPlayers();
 
-	ball = new Ball(petresBall);
+	ball = new Ball();
 }
 
 /* recreate canvas when page resized*/
@@ -66,6 +72,7 @@ function keyPressed() {
 
 function draw() {
 	//reset background every frame
+
 	background(0);
 
 	if (mode == 0) {
@@ -98,8 +105,8 @@ function draw() {
 		ball.paddleCollision(player1, 0);
 		ball.paddleCollision(player2, 1);
 
-		let score = ball.edges();
-		if (score !== undefined) score ? player1.incScore() : player2.incScore();
+		let result = ball.edges();
+		if (result !== undefined) result ? player1.incScore() : player2.incScore();
 
 		// draw score board
 		drawScores();

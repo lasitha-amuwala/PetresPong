@@ -1,16 +1,15 @@
 class Ball {
-	constructor(img) {
+	constructor() {
 		this.pos = createVector(width / 2, height / 2);
 		this.r = w * 0.05;
 		this.speed = createVector(5, 5);
 		this.maxSpeed = createVector(10, 10);
 		this.acc = this.randomAngle();
-		this.img = img;
 	}
 	/* display petres ball */
 	show() {
 		imageMode(CENTER);
-		image(this.img, this.pos.x, this.pos.y, this.r, this.r);
+		image(petresBall, this.pos.x, this.pos.y, this.r, this.r);
 	}
 
 	/* move ball based on speed and acceleration angle */
@@ -29,13 +28,16 @@ class Ball {
 	/* ceiling and floor collisions */
 	edges() {
 		// invert vertical acceleration when ball collides with floor or ceiling
-		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2)
+		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
 			this.acc.y = -this.acc.y;
+			wallSound.play();
+		}
 
 		// when ball collides with left or right wall
 		if (this.pos.x <= -10 || this.pos.x >= width + 10) {
 			let currPos = this.pos.x;
 
+			goalSound.play();
 			// reset ball position and angle
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
@@ -69,9 +71,11 @@ class Ball {
 				this.acc.y = Math.sin(bounceAngle);
 			}
 			// increase ball speed when ball hits paddle
-
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
 				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
+
+			// play sound when ball hits the paddle
+			paddleSound.play();
 		}
 	}
 }
