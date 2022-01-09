@@ -1,15 +1,16 @@
 let mode;
-let ball, player1, player2;
-let paddleSound;
-let wallSound;
-let goalSound;
-let petresBall;
-let twoPlayer;
 let w, h;
-let playAgain = false;
-const ROUNDS = 10;
 let winner;
-let RELATIVE_SCALE;
+let twoPlayer;
+let playAgain;
+let petresBall;
+let ball, player1, player2;
+let paddleSound, wallSound, goalSound;
+
+let RELATIVE_SCALE_X;
+let RELATIVE_SCALE_Y;
+
+const ROUNDS = 10;
 
 /* setup image */
 function preload() {
@@ -24,6 +25,7 @@ function setup() {
 	// initialize variables
 	mode = 0;
 	twoPlayer = true;
+	playAgain = false;
 
 	// create canvas and initialize players
 	centerCanvas();
@@ -54,7 +56,9 @@ function centerCanvas() {
 	w = width;
 	h = height;
 
-	RELATIVE_SCALE = w / 1211;
+	RELATIVE_SCALE_X = w / 1211;
+	RELATIVE_SCALE_Y = h / 655.5;
+
 	background(0);
 }
 
@@ -75,7 +79,7 @@ function keyPressed() {
 
 function draw() {
 	//reset background every frame
-	console.log(width);
+	console.log(height, width);
 	background(0);
 
 	if (mode == 0) {
