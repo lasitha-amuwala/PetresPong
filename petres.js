@@ -8,6 +8,7 @@ let twoPlayer;
 let w, h;
 let playAgain = false;
 const ROUNDS = 10;
+let winner;
 
 /* setup image */
 function preload() {
@@ -117,7 +118,10 @@ function draw() {
 
 	if (mode === 2) {
 		// determine winner, and display winner
-		let winner = player1.score === ROUNDS ? 'Player 1' : 'Player 2';
+
+		if (player1.score != 0 || player2.score != 0)
+			winner = player1.score === ROUNDS ? 'Player 1' : 'Player 2';
+
 		background(0);
 		textAlign(CENTER, CENTER);
 		textSize(60);
