@@ -9,6 +9,7 @@ let w, h;
 let playAgain = false;
 const ROUNDS = 10;
 let winner;
+let RELATIVE_SCALE;
 
 /* setup image */
 function preload() {
@@ -53,6 +54,7 @@ function centerCanvas() {
 	w = width;
 	h = height;
 
+	RELATIVE_SCALE = w / 1211;
 	background(0);
 }
 
@@ -73,7 +75,7 @@ function keyPressed() {
 
 function draw() {
 	//reset background every frame
-
+	console.log(width);
 	background(0);
 
 	if (mode == 0) {

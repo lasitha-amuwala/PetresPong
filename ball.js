@@ -14,8 +14,8 @@ class Ball {
 
 	/* move ball based on speed and acceleration angle */
 	move() {
-		this.pos.x += this.speed.x * this.acc.x;
-		this.pos.y += this.speed.y * this.acc.y;
+		this.pos.x += this.speed.x * this.acc.x * RELATIVE_SCALE;
+		this.pos.y += this.speed.y * this.acc.y * RELATIVE_SCALE;
 	}
 
 	/* generate an angle between a restricted area */

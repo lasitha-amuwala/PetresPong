@@ -4,8 +4,8 @@ class Player {
 		this.h = height * 0.2;
 		this.pos = createVector(x, y);
 		this.acc = createVector(0, 0);
-		this.spd = 10;
-		this.maxSpd = 10;
+		this.spd = 10 * RELATIVE_SCALE;
+		this.maxSpd = 10 * RELATIVE_SCALE;
 		this.score = 0;
 	}
 
