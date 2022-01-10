@@ -1,12 +1,12 @@
 class Player {
-	constructor(x, y) {
-		this.w = width * 0.005;
-		this.h = height * 0.2;
-		this.pos = createVector(x, y);
+	constructor(pos) {
+		this.pos = pos;
+		this.score = 0;
+		this.w = paddleW;
+		this.h = paddleH;
 		this.acc = createVector(0, 0);
 		this.spd = 10 * RELATIVE_SCALE_X;
 		this.maxSpd = 10 * RELATIVE_SCALE_X;
-		this.score = 0;
 	}
 
 	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);

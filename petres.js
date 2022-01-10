@@ -6,11 +6,13 @@ let playAgain;
 let petresBall;
 let ball, player1, player2;
 let paddleSound, wallSound, goalSound;
-
+let p1Pos, p2Pos;
 let RELATIVE_SCALE_X;
 let RELATIVE_SCALE_Y;
+let paddleH, paddleW;
 
 const ROUNDS = 10;
+const BALL_SPEED = 5;
 
 /* setup image */
 function preload() {
@@ -29,8 +31,27 @@ function setup() {
 
 	// create canvas and initialize players
 	centerCanvas();
-	initPlayers();
 
+	w = width;
+	h = height;
+
+	// relative scale based on resolution of screem
+	RELATIVE_SCALE_X = w / 1211;
+	RELATIVE_SCALE_Y = h / 655.5;
+
+	// paddle with and height
+	paddleH = h / 5;
+	paddleW = 5 * RELATIVE_SCALE_X;
+
+	// positions of players paddle
+	p1Pos = createVector(25 * RELATIVE_SCALE_X, h / 2 - paddleH / 2);
+	p2Pos = createVector(w - 25 * RELATIVE_SCALE_X, h / 2 - paddleH / 2);
+
+	// create instance of Player
+	player1 = new Player(p1Pos.copy());
+	player2 = new Player(p2Pos.copy());
+
+	// create instance of Ball
 	ball = new Ball();
 }
 
@@ -52,51 +73,30 @@ function centerCanvas() {
 
 	canvas = createCanvas(winWidth, winHeight);
 	canvas.position((windowWidth - width) / 2, (windowHeight - height) / 2);
-
-	w = width;
-	h = height;
-
-	RELATIVE_SCALE_X = w / 1211;
-	RELATIVE_SCALE_Y = h / 655.5;
-
-	background(0);
-}
-
-function initPlayers() {
-	// calculates paddle positions based on window size percentages
-	player1 = new Player(w - w * 0.98, h / 2 - (h * 0.15) / 2);
-	player2 = new Player(w - w * 0.02 - w * 0.005, h / 2 - (h * 0.15) / 2);
-}
-
-/* Logic per keypress */
-function keyPressed() {
-	if (key == 'w' || key == 'W') player1.goUp();
-	if (key == 's' || key == 'S') player1.down();
-	if (keyCode == ENTER) mode = 1;
-	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
-	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
 }
 
 function draw() {
 	//reset background every frame
-	console.log(height, width);
 	background(0);
 
 	if (mode == 0) {
 		/* Display Start Menu */
 		fill(256);
 		textAlign(CENTER, CENTER);
-		textSize(60);
+		textSize(60 * RELATIVE_SCALE_X);
 		text('Petres Pong', w / 2, h / 2);
-		textSize(20);
-		text('Press enter to start', w / 2, h / 2 + 100);
+		textSize(20 * RELATIVE_SCALE_X);
+		text('Press enter to start', w / 2, h / 2 + 100 * RELATIVE_SCALE_X);
 	}
 
 	if (mode == 1) {
 		/* Display Game */
 		// Draw net
 		stroke(255);
-		for (let i = 0; i < h; i += 30) line(w / 2, i, w / 2, i + 10);
+		strokeWeight(1 * RELATIVE_SCALE_X);
+
+		for (let i = 0; i < h; i += 30 * RELATIVE_SCALE_Y)
+			line(w / 2, i, w / 2, i + 10 * RELATIVE_SCALE_Y);
 
 		// draw player 1 paddle
 		player1.update();
@@ -112,8 +112,8 @@ function draw() {
 		ball.paddleCollision(player1, 0);
 		ball.paddleCollision(player2, 1);
 
-		let result = ball.edges();
-		if (result !== undefined) result ? player1.incScore() : player2.incScore();
+		let score = ball.edges();
+		if (score !== undefined) score ? player1.incScore() : player2.incScore();
 
 		// draw score board
 		drawScores();
@@ -130,15 +130,31 @@ function draw() {
 
 		background(0);
 		textAlign(CENTER, CENTER);
-		textSize(60);
+		textSize(60 * RELATIVE_SCALE_X);
 		text(winner + ' Wins!', w / 2, h / 2);
 
 		// display scores
-		textSize(20);
-		text('Press enter to play again', w / 2, h / 2 + 100);
+		textSize(20 * RELATIVE_SCALE_X);
+		text('Press enter to play again', w / 2, h / 2 + 100 * RELATIVE_SCALE_X);
+
 		// reset players
-		initPlayers();
+		player1.score = 0;
+		player2.score = 0;
+		player1.pos = p1Pos;
+		player2.pos = p2Pos;
+
+		//reset ball speed
+		ball.speed = createVector(BALL_SPEED, BALL_SPEED);
 	}
+}
+
+/* Logic per keypress */
+function keyPressed() {
+	if (key == 'w' || key == 'W') player1.goUp();
+	if (key == 's' || key == 'S') player1.down();
+	if (keyCode == ENTER) mode = 1;
+	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
+	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
 }
 
 /* Logic per key release */
@@ -151,8 +167,8 @@ function keyReleased() {
 /* Display player scores */
 function drawScores() {
 	fill(256);
-	textSize(24);
+	textSize(24 * RELATIVE_SCALE_X);
 	textAlign(CENTER);
-	text(player1.score, w / 2 - 50, 50);
-	text(player2.score, w / 2 + 50, 50);
+	text(player1.score, w / 2 - 50 * RELATIVE_SCALE_X, 50 * RELATIVE_SCALE_X);
+	text(player2.score, w / 2 + 50 * RELATIVE_SCALE_X, 50 * RELATIVE_SCALE_X);
 }
