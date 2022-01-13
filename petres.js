@@ -11,7 +11,7 @@ let RELATIVE_SCALE_X;
 let RELATIVE_SCALE_Y;
 let paddleH, paddleW;
 
-const ROUNDS = 3;
+const ROUNDS = 10;
 const BALL_SPEED = 5;
 
 /* setup image */
