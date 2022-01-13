@@ -1,6 +1,6 @@
 class Player {
 	constructor(pos) {
-		this.pos = pos;
+		this.pos = createVector(pos, pPosY);
 		this.score = 0;
 		this.w = paddleW;
 		this.h = paddleH;
@@ -18,11 +18,10 @@ class Player {
 	stop = () => (this.acc.y = 0);
 	// incremenet player score
 	incScore = () => (this.score += 1);
-
 	// update paddle position
-	update() {
+	update = () => {
 		this.acc.y = constrain(this.acc.y, -this.maxSpd, this.maxSpd);
 		this.pos.add(this.acc);
 		this.pos.y = constrain(this.pos.y, 0, height - this.h);
-	}
+	};
 }

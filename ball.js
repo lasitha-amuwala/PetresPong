@@ -1,11 +1,12 @@
 class Ball {
 	constructor() {
-		this.pos = createVector(width / 2, height / 2);
+		this.acc = this.randomAngle();
 		this.r = 60 * RELATIVE_SCALE_X;
 		this.speed = createVector(5, 5);
 		this.maxSpeed = createVector(10, 10);
-		this.acc = this.randomAngle();
+		this.pos = createVector(width / 2, height / 2);
 	}
+
 	/* display petres ball */
 	show() {
 		imageMode(CENTER);
@@ -14,6 +15,7 @@ class Ball {
 
 	/* move ball based on speed and acceleration angle */
 	move() {
+		this.r = 60 * RELATIVE_SCALE_X;
 		this.pos.x += this.speed.x * this.acc.x * RELATIVE_SCALE_X;
 		this.pos.y += this.speed.y * this.acc.y * RELATIVE_SCALE_Y;
 	}

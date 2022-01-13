@@ -6,12 +6,12 @@ let playAgain;
 let petresBall;
 let ball, player1, player2;
 let paddleSound, wallSound, goalSound;
-let p1Pos, p2Pos;
+let p1PosX, p2PosX, pPosY;
 let RELATIVE_SCALE_X;
 let RELATIVE_SCALE_Y;
 let paddleH, paddleW;
 
-const ROUNDS = 10;
+const ROUNDS = 3;
 const BALL_SPEED = 5;
 
 /* setup image */
@@ -32,25 +32,13 @@ function setup() {
 	// create canvas and initialize players
 	centerCanvas();
 
-	w = width;
-	h = height;
-
-	// relative scale based on resolution of screem
-	RELATIVE_SCALE_X = w / 1211;
-	RELATIVE_SCALE_Y = h / 655.5;
-
-	// paddle with and height
-	paddleH = h / 5;
-	paddleW = 5 * RELATIVE_SCALE_X;
-
-	// positions of players paddle
-	p1Pos = createVector(25 * RELATIVE_SCALE_X, h / 2 - paddleH / 2);
-	p2Pos = createVector(w - 25 * RELATIVE_SCALE_X, h / 2 - paddleH / 2);
+	p1PosX = 25 * RELATIVE_SCALE_Y;
+	p2PosX = w - 25 * RELATIVE_SCALE_Y;
+	pPosY = h / 2 - paddleH / 2;
 
 	// create instance of Player
-	player1 = new Player(p1Pos.copy());
-	player2 = new Player(p2Pos.copy());
-
+	player1 = new Player(p1PosX);
+	player2 = new Player(p2PosX);
 	// create instance of Ball
 	ball = new Ball();
 }
@@ -58,6 +46,14 @@ function setup() {
 /* recreate canvas when page resized*/
 function windowResized() {
 	centerCanvas();
+
+	// reset paddle position on window resize and adjust dimentions
+	player1.w = paddleW;
+	player1.h = paddleH;
+	player2.w = paddleW;
+	player2.h = paddleH;
+	player1.pos = createVector(25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
+	player2.pos = createVector(w - 25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
 }
 
 /* Create game canvas in center of page */
@@ -73,6 +69,17 @@ function centerCanvas() {
 
 	canvas = createCanvas(winWidth, winHeight);
 	canvas.position((windowWidth - width) / 2, (windowHeight - height) / 2);
+
+	w = width;
+	h = height;
+
+	// relative scale based on resolution of screem
+	RELATIVE_SCALE_X = w / 1211;
+	RELATIVE_SCALE_Y = h / 655.5;
+
+	// paddle width and heights
+	paddleH = h / 6;
+	paddleW = 5 * RELATIVE_SCALE_X;
 }
 
 function draw() {
@@ -86,7 +93,7 @@ function draw() {
 		textSize(60 * RELATIVE_SCALE_X);
 		text('Petres Pong', w / 2, h / 2);
 		textSize(20 * RELATIVE_SCALE_X);
-		text('Press enter to start', w / 2, h / 2 + 100 * RELATIVE_SCALE_X);
+		text('Press enter to start', w / 2, h / 2 + 100 * RELATIVE_SCALE_Y);
 	}
 
 	if (mode == 1) {
@@ -140,10 +147,8 @@ function draw() {
 		// reset players
 		player1.score = 0;
 		player2.score = 0;
-		player1.pos = p1Pos;
-		player2.pos = p2Pos;
-
-		//reset ball speed
+		player1.pos = createVector(p1PosX, pPosY);
+		player2.pos = createVector(p2PosX, pPosY);
 		ball.speed = createVector(BALL_SPEED, BALL_SPEED);
 	}
 }
