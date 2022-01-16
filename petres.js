@@ -24,7 +24,6 @@ function preload() {
 
 /* setup canvas */
 function setup() {
-
 	// initialize variables
 	mode = 0;
 	twoPlayer = true;
@@ -56,9 +55,7 @@ function windowResized() {
 	player1.pos = createVector(25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
 	player2.pos = createVector(w - 25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
 }
-function touchStarted() {
-  getAudioContext().resume()
-}
+
 /* Create game canvas in center of page */
 function centerCanvas() {
 	// calculate canvas size to be in the center
@@ -91,9 +88,17 @@ function draw() {
 
 	if (mode == 0) {
 		/* Display Start Menu */
+		let imgSize = 100 * RELATIVE_SCALE_X;
+
+		push();
+		translate(w / 2, h / 4);
+		rotate(radians(frameCount / 1.5));
+		image(petresBall, 0 - imgSize / 2, 0 - imgSize / 2, imgSize, imgSize);
+		pop();
+
 		fill(256);
 		textAlign(CENTER, CENTER);
-		textSize(60 * RELATIVE_SCALE_X);
+		textSize(75 * RELATIVE_SCALE_X);
 		text('Petres Pong', w / 2, h / 2);
 		textSize(20 * RELATIVE_SCALE_X);
 		text('Press enter to start', w / 2, h / 2 + 100 * RELATIVE_SCALE_Y);

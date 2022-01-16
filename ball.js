@@ -29,7 +29,6 @@ class Ball {
 
 	/* ceiling and floor collisions */
 	edges() {
-
 		// invert vertical acceleration when ball collides with floor or ceiling
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
 			this.acc.y = -this.acc.y;
@@ -62,12 +61,10 @@ class Ball {
 			: this.pos.x <= p.pos.x + this.r / 2 + p.w;
 
 		if (checkPaddle && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
-
 			// only invert acceleration if the ball is coming toward the paddle
 			// prevents invert accleration if paddle is hit from behind and prevents ball getting stuck on paddle
 
 			if ((d && this.acc.x > 0) || (!d && this.acc.x < 0)) {
-
 				// calculate angle of reflection based on intersection distance from center of paddle
 				let intersectY = p.pos.y + p.h / 2 - this.pos.y;
 				let normalizedIntersectY = intersectY / (p.h / 2);
