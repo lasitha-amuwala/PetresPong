@@ -1,5 +1,5 @@
 class Player {
-	constructor(pos) {
+	constructor(pos, p = p5.instance) {
 		this.pos = createVector(pos, pPosY);
 		this.score = 0;
 		this.w = paddleW;

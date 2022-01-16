@@ -1,5 +1,5 @@
 class Ball {
-	constructor() {
+	constructor(p = p5.instance) {
 		this.acc = this.randomAngle();
 		this.r = 60 * RELATIVE_SCALE_X;
 		this.speed = createVector(5, 5);
@@ -29,6 +29,7 @@ class Ball {
 
 	/* ceiling and floor collisions */
 	edges() {
+
 		// invert vertical acceleration when ball collides with floor or ceiling
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
 			this.acc.y = -this.acc.y;
@@ -61,9 +62,12 @@ class Ball {
 			: this.pos.x <= p.pos.x + this.r / 2 + p.w;
 
 		if (checkPaddle && this.pos.y >= p.pos.y && this.pos.y <= p.pos.y + p.h) {
+
 			// only invert acceleration if the ball is coming toward the paddle
 			// prevents invert accleration if paddle is hit from behind and prevents ball getting stuck on paddle
+
 			if ((d && this.acc.x > 0) || (!d && this.acc.x < 0)) {
+
 				// calculate angle of reflection based on intersection distance from center of paddle
 				let intersectY = p.pos.y + p.h / 2 - this.pos.y;
 				let normalizedIntersectY = intersectY / (p.h / 2);
@@ -72,6 +76,7 @@ class Ball {
 				this.acc.x = Math.cos(bounceAngle) * d ? -1 : 1;
 				this.acc.y = Math.sin(bounceAngle);
 			}
+
 			// increase ball speed when ball hits paddle
 			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
 				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);

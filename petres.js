@@ -24,6 +24,7 @@ function preload() {
 
 /* setup canvas */
 function setup() {
+
 	// initialize variables
 	mode = 0;
 	twoPlayer = true;
@@ -55,7 +56,9 @@ function windowResized() {
 	player1.pos = createVector(25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
 	player2.pos = createVector(w - 25 * RELATIVE_SCALE_Y, h / 2 - paddleH / 2);
 }
-
+function touchStarted() {
+  getAudioContext().resume()
+}
 /* Create game canvas in center of page */
 function centerCanvas() {
 	// calculate canvas size to be in the center
