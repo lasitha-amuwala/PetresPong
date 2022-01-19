@@ -5,8 +5,8 @@ class Player {
 		this.w = paddleW;
 		this.h = paddleH;
 		this.acc = createVector(0, 0);
-		this.spd = 10 * RELATIVE_SCALE_X;
-		this.maxSpd = 10 * RELATIVE_SCALE_X;
+		this.spd = 12 * RELATIVE_SCALE_X;
+		this.maxSpd = 12 * RELATIVE_SCALE_X;
 	}
 
 	show = () => rect(this.pos.x, this.pos.y, this.w, this.h);

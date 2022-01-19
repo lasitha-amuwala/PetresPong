@@ -1,15 +1,15 @@
 let mode;
 let w, h;
+let sounds;
 let winner;
 let twoPlayer;
 let playAgain;
 let petresBall;
-let ball, player1, player2;
-let paddleSound, wallSound, goalSound;
-let p1PosX, p2PosX, pPosY;
 let RELATIVE_SCALE_X;
 let RELATIVE_SCALE_Y;
 let paddleH, paddleW;
+let p1PosX, p2PosX, pPosY;
+let ball, player1, player2;
 
 const ROUNDS = 10;
 const BALL_SPEED = 5;
@@ -17,16 +17,18 @@ const BALL_SPEED = 5;
 /* setup image */
 function preload() {
 	petresBall = loadImage('assets/petres-ball.png');
-	paddleSound = loadSound('assets/paddleSound.mp3');
-	wallSound = loadSound('assets/wallSound.mp3');
-	goalSound = loadSound('assets/goalSound.mp3');
+	sounds = {
+		paddleSound: loadSound('assets/paddleSound.mp3'),
+		wallSound: loadSound('assets/wallSound.mp3'),
+		goalSound: loadSound('assets/goalSound.mp3'),
+	};
 }
 
 /* setup canvas */
 function setup() {
 	// initialize variables
 	mode = 0;
-	twoPlayer = true;
+	twoPlayer = false;
 	playAgain = false;
 
 	// create canvas and initialize players
@@ -41,6 +43,8 @@ function setup() {
 	player2 = new Player(p2PosX);
 	// create instance of Ball
 	ball = new Ball();
+
+	if (!twoPlayer) player2.maxSpd = 10 * RELATIVE_SCALE_X;
 }
 
 /* recreate canvas when page resized*/
@@ -121,6 +125,7 @@ function draw() {
 		player2.update();
 		player2.show();
 
+		!twoPlayer && AI();
 		// draw ball
 		ball.show();
 		ball.move();
@@ -146,7 +151,7 @@ function draw() {
 		background(0);
 		textAlign(CENTER, CENTER);
 		textSize(60 * RELATIVE_SCALE_X);
-		text(winner + ' Wins!', w / 2, h / 2);
+		text(twoPlayer ? winner + ' Wins!' : 'You Lose!', w / 2, h / 2);
 
 		// display scores
 		textSize(20 * RELATIVE_SCALE_X);
@@ -158,6 +163,23 @@ function draw() {
 		player1.pos = createVector(p1PosX, pPosY);
 		player2.pos = createVector(p2PosX, pPosY);
 		ball.speed = createVector(BALL_SPEED, BALL_SPEED);
+	}
+}
+
+function AI() {
+	let ballY = ball.pos.y;
+	let paddleY = player2.pos.y;
+
+	if (ball.pos.x > w / 2 && ball.acc.x > 0) {
+		ballY < paddleY + paddleH / 2 ? player2.goUp() : player2.down();
+	} else {
+		if (paddleY > h / 2 - paddleH / 2 + 10 * RELATIVE_SCALE_X) {
+			player2.goUp();
+		} else if (paddleY < h / 2 - paddleH / 2 - 10 * RELATIVE_SCALE_Y) {
+			player2.down();
+		} else {
+			player2.stop();
+		}
 	}
 }
 
