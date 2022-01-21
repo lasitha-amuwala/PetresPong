@@ -3,7 +3,7 @@ class Ball {
 		this.acc = this.randomAngle();
 		this.r = 60 * RELATIVE_SCALE_X;
 		this.speed = createVector(5, 5);
-		this.maxSpeed = createVector(12, 12);
+		this.maxSpeed = createVector(15, 12);
 		this.pos = createVector(width / 2, height / 2);
 	}
 

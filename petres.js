@@ -44,13 +44,12 @@ function setup() {
 	// create instance of Ball
 	ball = new Ball();
 
-	if (!twoPlayer) player2.maxSpd = 10 * RELATIVE_SCALE_X;
+	if (!twoPlayer) player1.maxSpd = 8 * RELATIVE_SCALE_X;
 }
 
 /* recreate canvas when page resized*/
 function windowResized() {
 	centerCanvas();
-
 	// reset paddle position on window resize and adjust dimentions
 	player1.w = paddleW;
 	player1.h = paddleH;
@@ -145,13 +144,18 @@ function draw() {
 	if (mode === 2) {
 		// determine winner, and display winner
 
-		if (player1.score != 0 || player2.score != 0)
-			winner = player1.score === ROUNDS ? 'Player 1' : 'Player 2';
+		if (player1.score != 0 || player2.score != 0) {
+			if (twoPlayer) {
+				winner = player1.score === ROUNDS ? 'Player 1 Wins!' : 'Player 2 Wins!';
+			} else {
+				winner = player1.score === ROUNDS ? 'You Lose!' : 'You Win!';
+			}
+		}
 
 		background(0);
 		textAlign(CENTER, CENTER);
 		textSize(60 * RELATIVE_SCALE_X);
-		text(twoPlayer ? winner + ' Wins!' : 'You Lose!', w / 2, h / 2);
+		text(winner, w / 2, h / 2);
 
 		// display scores
 		textSize(20 * RELATIVE_SCALE_X);
@@ -168,35 +172,35 @@ function draw() {
 
 function AI() {
 	let ballY = ball.pos.y;
-	let paddleY = player2.pos.y;
+	let paddleY = player1.pos.y;
 
-	if (ball.pos.x > w / 2 && ball.acc.x > 0) {
-		ballY < paddleY + paddleH / 2 ? player2.goUp() : player2.down();
+	if (ball.pos.x < w / 2 && ball.acc.x < 0) {
+		ballY < paddleY + paddleH / 2 ? player1.goUp() : player1.down();
 	} else {
 		if (paddleY > h / 2 - paddleH / 2 + 10 * RELATIVE_SCALE_X) {
-			player2.goUp();
+			player1.goUp();
 		} else if (paddleY < h / 2 - paddleH / 2 - 10 * RELATIVE_SCALE_Y) {
-			player2.down();
+			player1.down();
 		} else {
-			player2.stop();
+			player1.stop();
 		}
 	}
 }
 
 /* Logic per keypress */
 function keyPressed() {
-	if (key == 'w' || key == 'W') player1.goUp();
-	if (key == 's' || key == 'S') player1.down();
+	if (twoPlayer && (key == 'w' || key == 'W')) player1.goUp();
+	if (twoPlayer && (key == 's' || key == 'S')) player1.down();
 	if (keyCode == ENTER) mode = 1;
-	if (twoPlayer && keyCode == UP_ARROW) player2.goUp();
-	if (twoPlayer && keyCode == DOWN_ARROW) player2.down();
+	if (keyCode == UP_ARROW) player2.goUp();
+	if (keyCode == DOWN_ARROW) player2.down();
 }
 
 /* Logic per key release */
 function keyReleased() {
-	if (key == 'w' || key == 'W' || key == 's' || key == 'S') player1.stop();
-	if (twoPlayer && (keyCode == UP_ARROW || keyCode == DOWN_ARROW))
-		player2.stop();
+	if (twoPlayer && (key.toLowerCase() == 'w' || key.toLowerCase() == 's'))
+		player1.stop();
+	if (keyCode == UP_ARROW || keyCode == DOWN_ARROW) player2.stop();
 }
 
 /* Display player scores */
