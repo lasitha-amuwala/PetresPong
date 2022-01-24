@@ -44,9 +44,11 @@ class Ball {
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
 
-			// increase ball speed when collides with left and right wall
-			if (this.speed.x <= this.maxSpeed.x && this.speed.y <= this.maxSpeed.y)
-				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
+			// decrease speed when player gets a goal
+			if (this.speed.x > 6 && this.speed.y > 6) {
+				this.speed.x = this.speed.x - 1;
+				this.speed.y = this.speed.y - 1;
+			}
 
 			// return which side ball collided with, 0 = left, 1 = right
 			return currPos <= 0 ? 0 : 1;
