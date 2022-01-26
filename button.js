@@ -1,8 +1,6 @@
 class Button {
-	constructor(l, bW, bH) {
+	constructor(l, bW, bH, p) {
 		this.l = l;
-		this.w = bW * RS_X;
-		this.h = bH * RS_Y;
 		this.selected = false;
 	}
 
@@ -17,6 +15,13 @@ class Button {
 
 	clicked() {
 		if (this.intersect()) this.selected = !this.selected;
+	}
+
+	update(w, h, p) {
+		this.x = p.x;
+		this.y = p.y;
+		this.w = w;
+		this.h = h;
 	}
 
 	show() {

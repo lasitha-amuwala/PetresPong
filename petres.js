@@ -9,7 +9,6 @@ let p1PosX, p2PosX, pPosY;
 let ball, player1, player2;
 
 let playBtn, singleBtn, multiBtn;
-let playAgainBtn, MainMenuBtn;
 
 let mode = 0;
 let twoPlayer = false;
@@ -48,29 +47,15 @@ function setup() {
 	player2 = new Player(p2PosX);
 
 	// create Buttons
-	playBtn = new Button('Play', btnW, btnH);
-	multiBtn = new Button('Multiplayer', btnW, btnH);
-	singleBtn = new Button('Singleplayer', btnW, btnH);
-	MainMenuBtn = new Button('Main Menu', btnW, btnH);
-	playAgainBtn = new Button('Play Again', btnW, btnH);
+	playBtn = new Button('Play');
+	multiBtn = new Button('Multiplayer');
+	singleBtn = new Button('Singleplayer');
+	mainMenuBtn = new Button('Main Menu');
+	playAgainBtn = new Button('Play Again');
 
-	alignButtons();
+	updateObjects();
 
 	if (!twoPlayer) player1.maxSpd = 8 * RS_X;
-}
-
-/* recreate canvas when page resized*/
-function windowResized() {
-	centerCanvas();
-	// reset paddle position on window resize and adjust dimentions
-	player1.w = paddleW;
-	player1.h = paddleH;
-	player2.w = paddleW;
-	player2.h = paddleH;
-	player1.pos = createVector(25 * RS_Y, h / 2 - paddleH / 2);
-	player2.pos = createVector(w - 25 * RS_Y, h / 2 - paddleH / 2);
-
-	alignButtons();
 }
 
 /* Create game canvas in center of page */
@@ -97,9 +82,20 @@ function centerCanvas() {
 	// paddle width and heights
 	paddleH = h / 6;
 	paddleW = 5 * RS_X;
+}
 
-	btnH = 50 * RS_Y;
-	btnW = 150 * RS_X;
+/* recreate canvas when page resized*/
+function windowResized() {
+	centerCanvas();
+	// reset paddle position on window resize and adjust dimentions
+	player1.w = paddleW;
+	player1.h = paddleH;
+	player2.w = paddleW;
+	player2.h = paddleH;
+	player1.pos = createVector(25 * RS_Y, h / 2 - paddleH / 2);
+	player2.pos = createVector(w - 25 * RS_Y, h / 2 - paddleH / 2);
+
+	updateObjects();
 }
 
 function draw() {
@@ -128,6 +124,14 @@ function drawStartScreen() {
 	text('Petres Pong', w / 2, h / 2 - 25 * RS_Y);
 	pop();
 
+	if (twoPlayer) {
+		singleBtn.unSelect();
+		multiBtn.select();
+	} else {
+		singleBtn.select();
+		multiBtn.unSelect();
+	}
+
 	if (playBtn.selected) mode = 1;
 
 	playBtn.show();
@@ -137,7 +141,7 @@ function drawStartScreen() {
 
 /* Display Game */
 function drawGameScreen() {
-	MainMenuBtn.unSelect();
+	mainMenuBtn.unSelect();
 	playAgainBtn.unSelect();
 	// Draw net and score board
 	drawField();
@@ -195,11 +199,11 @@ function drawEndScreen() {
 	player2.pos = createVector(p2PosX, pPosY);
 	ball.speed = createVector(BALL_SPEED, BALL_SPEED);
 
-	MainMenuBtn.show();
+	mainMenuBtn.show();
 	playAgainBtn.show();
 
 	if (playAgainBtn.selected) mode = 1;
-	if (MainMenuBtn.selected) mode = 0;
+	if (mainMenuBtn.selected) mode = 0;
 }
 
 function AI() {
@@ -235,18 +239,22 @@ function drawField() {
 	pop();
 }
 
-function alignButtons() {
-	playBtn.x = w / 2 - playBtn.w / 2;
-	multiBtn.x = w / 2 - multiBtn.w / 2 + 100 * RS_X;
-	singleBtn.x = w / 2 - singleBtn.w / 2 - 100 * RS_X;
-	MainMenuBtn.x = w / 2 - MainMenuBtn.w / 2 - 100 * RS_X;
-	playAgainBtn.x = w / 2 - playAgainBtn.w / 2 + 100 * RS_X;
+function updateObjects() {
+	let newBtnH = btnH * RS_Y;
+	let newBtnW = btnW * RS_X;
+	let BtnY = h - 250 * RS_Y;
 
-	playBtn.y = h - 150 * RS_Y;
-	multiBtn.y = h - 250 * RS_Y;
-	singleBtn.y = h - 250 * RS_Y;
-	MainMenuBtn.y = h - 250 * RS_Y;
-	playAgainBtn.y = h - 250 * RS_Y;
+	playBtnPos = createVector(w / 2 - newBtnW / 2, h - 150 * RS_Y);
+	multiBtnPos = createVector(w / 2 - newBtnW / 2 + 100 * RS_X, BtnY);
+	singleBtnPos = createVector(w / 2 - newBtnW / 2 - 100 * RS_X, BtnY);
+	mainMenuBtnPos = createVector(w / 2 - newBtnW / 2 - 100 * RS_X, BtnY);
+	playAgainBtnPos = createVector(w / 2 - newBtnW / 2 + 100 * RS_X, BtnY);
+
+	playBtn.update(newBtnW, newBtnH, playBtnPos);
+	multiBtn.update(newBtnW, newBtnH, multiBtnPos);
+	singleBtn.update(newBtnW, newBtnH, singleBtnPos);
+	mainMenuBtn.update(newBtnW, newBtnH, mainMenuBtnPos);
+	playAgainBtn.update(newBtnW, newBtnH, playAgainBtnPos);
 }
 
 /* Logic per keypress */
@@ -268,6 +276,14 @@ function mousePressed() {
 	playBtn.clicked();
 	multiBtn.clicked();
 	singleBtn.clicked();
-	MainMenuBtn.clicked();
+	mainMenuBtn.clicked();
 	playAgainBtn.clicked();
+}
+
+function deviceTurned() {
+	if (value === 0) {
+		value = 255;
+	} else if (value === 255) {
+		value = 0;
+	}
 }
