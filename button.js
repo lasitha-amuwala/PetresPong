@@ -21,6 +21,7 @@ class Button {
 
 	show() {
 		let textColor, btnColor;
+
 		if (this.intersect()) {
 			btnColor = 255;
 			textColor = 0;
@@ -34,11 +35,16 @@ class Button {
 			textColor = 255;
 		}
 
-		fill(btnColor);
+		push();
 		stroke(255);
+		fill(btnColor);
+		textSize(20 * RS_X);
+		textAlign(CENTER, CENTER);
 		rect(this.x, this.y, this.w, this.h, 10 * RS_X);
+
 		noStroke();
 		fill(textColor);
 		text(this.l, this.x + this.w / 2, this.y + this.h / 2);
+		pop();
 	}
 }

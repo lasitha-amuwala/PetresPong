@@ -7,7 +7,9 @@ let RS_Y; // Relative Scale Y
 let paddleH, paddleW;
 let p1PosX, p2PosX, pPosY;
 let ball, player1, player2;
+
 let playBtn, singleBtn, multiBtn;
+let playAgainBtn, MainMenuBtn;
 
 let mode = 0;
 let twoPlayer = false;
@@ -38,15 +40,19 @@ function setup() {
 	p2PosX = w - 25 * RS_Y;
 	pPosY = h / 2 - paddleH / 2;
 
-	// create instance of Player
-	player1 = new Player(p1PosX);
-	player2 = new Player(p2PosX);
-	// create instance of Ball
+	// create Ball
 	ball = new Ball();
 
+	// create Players
+	player1 = new Player(p1PosX);
+	player2 = new Player(p2PosX);
+
+	// create Buttons
+	playBtn = new Button('Play', btnW, btnH);
 	multiBtn = new Button('Multiplayer', btnW, btnH);
 	singleBtn = new Button('Singleplayer', btnW, btnH);
-	playBtn = new Button('Play', btnW, btnH);
+	MainMenuBtn = new Button('Main Menu', btnW, btnH);
+	playAgainBtn = new Button('Play Again', btnW, btnH);
 
 	alignButtons();
 
@@ -97,90 +103,103 @@ function centerCanvas() {
 }
 
 function draw() {
-	//reset background every frame
-	background(0);
+	background(0); //reset background every frame
 
-	if (mode == 0) {
-		/* Display Start Menu */
-		let imgSize = 100 * RS_X;
+	if (mode == 0) drawStartScreen();
+	else if (mode == 1) drawGameScreen();
+	else drawEndScreen();
+}
 
-		push();
-		translate(w / 2, h / 4);
-		rotate(radians(frameCount / 1.5));
-		image(petresBall, 0 - imgSize / 2, 0 - imgSize / 2, imgSize, imgSize);
-		pop();
+/* Display Start Menu */
+function drawStartScreen() {
+	let imgSize = 100 * RS_X;
 
-		fill(256);
-		textAlign(CENTER, CENTER);
-		textSize(100 * RS_X);
-		text('Petres Pong', w / 2, h / 2 - 25 * RS_Y);
-		textSize(20 * RS_X);
+	push();
+	translate(w / 2, h / 4);
+	rotate(radians(frameCount / 1.5));
+	imageMode(CORNER);
+	image(petresBall, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
+	pop();
 
-		if (playBtn.selected) mode = 1;
+	push();
+	fill(255);
+	textAlign(CENTER, CENTER);
+	textSize(100 * RS_X);
+	text('Petres Pong', w / 2, h / 2 - 25 * RS_Y);
+	pop();
 
-		playBtn.show();
-		multiBtn.show();
-		singleBtn.show();
-	}
+	if (playBtn.selected) mode = 1;
 
-	if (mode == 1) {
-		/* Display Game */
+	playBtn.show();
+	multiBtn.show();
+	singleBtn.show();
+}
 
-		// Draw net and score board
-		drawField();
+/* Display Game */
+function drawGameScreen() {
+	MainMenuBtn.unSelect();
+	playAgainBtn.unSelect();
+	// Draw net and score board
+	drawField();
 
-		// Draw player 1 paddle
-		player1.update();
-		player1.show();
+	// Draw player 1 paddle
+	player1.show();
+	player2.show();
 
-		// Draw player 2 paddle
-		player2.update();
-		player2.show();
+	// Draw player 2 paddle
+	player1.update();
+	player2.update();
 
-		// If two player is disabled enable AI
-		!twoPlayer && AI();
+	// If two player is disabled enable AI
+	!twoPlayer && AI();
 
-		// Draw ball
-		ball.show();
-		ball.move();
-		ball.paddleCollision(player1, 0);
-		ball.paddleCollision(player2, 1);
+	// Draw ball
+	ball.show();
+	ball.move();
 
-		// Increment player scores
-		let score = ball.edges();
-		if (score !== undefined) score ? player1.incScore() : player2.incScore();
+	ball.paddleCollision(player1, 0);
+	ball.paddleCollision(player2, 1);
 
-		// if a player reaches the goal display end menu
-		if (player1.score >= ROUNDS || player2.score >= ROUNDS) mode = 2;
-	}
+	// Increment player scores
+	let score = ball.edges();
+	if (score !== undefined) score ? player1.incScore() : player2.incScore();
 
-	if (mode === 2) {
-		// determine winner, and display winner
+	// if a player reaches the goal display end menu
+	if (player1.score >= ROUNDS || player2.score >= ROUNDS) mode = 2;
+}
 
-		if (player1.score != 0 || player2.score != 0) {
-			if (twoPlayer) {
-				winner = player1.score === ROUNDS ? 'Player 1 Wins!' : 'Player 2 Wins!';
-			} else {
-				winner = player1.score === ROUNDS ? 'You Lose!' : 'You Win!';
-			}
+/* Display End Menu */
+function drawEndScreen() {
+	playBtn.unSelect();
+
+	// determine winner, and display winner
+	if (player1.score != 0 || player2.score != 0) {
+		if (twoPlayer) {
+			winner = player1.score === ROUNDS ? 'Player 1 Wins!' : 'Player 2 Wins!';
+		} else {
+			winner = player1.score === ROUNDS ? 'You Lose!' : 'You Win!';
 		}
-
-		background(0);
-		textAlign(CENTER, CENTER);
-		textSize(60 * RS_X);
-		text(winner, w / 2, h / 2);
-
-		// display scores
-		textSize(20 * RS_X);
-		text('Press enter to play again', w / 2, h / 2 + 100 * RS_X);
-
-		// reset players
-		player1.score = 0;
-		player2.score = 0;
-		player1.pos = createVector(p1PosX, pPosY);
-		player2.pos = createVector(p2PosX, pPosY);
-		ball.speed = createVector(BALL_SPEED, BALL_SPEED);
 	}
+
+	push();
+	fill(255);
+	textAlign(CENTER, CENTER);
+	textSize(60 * RS_X);
+	text(winner, w / 2, h / 2);
+	pop();
+
+	// reset players
+	player1.score = 0;
+	player2.score = 0;
+	player1.pos = createVector(p1PosX, pPosY);
+	player2.pos = createVector(p2PosX, pPosY);
+	ball.speed = createVector(BALL_SPEED, BALL_SPEED);
+
+	MainMenuBtn.show();
+	playAgainBtn.show();
+
+	if (playAgainBtn.selected) mode = 1;
+	if (MainMenuBtn.selected) mode = 0;
 }
 
 function AI() {
@@ -202,45 +221,53 @@ function AI() {
 
 /* Display field */
 function drawField() {
+	push();
 	stroke(255);
 	strokeWeight(1 * RS_X);
+
 	for (let i = 0; i < h; i += 30 * RS_Y) line(w / 2, i, w / 2, i + 10 * RS_Y);
 
-	fill(256);
+	fill(255);
 	textSize(24 * RS_X);
 	textAlign(CENTER);
 	text(player1.score, w / 2 - 50 * RS_X, 50 * RS_X);
 	text(player2.score, w / 2 + 50 * RS_X, 50 * RS_X);
+	pop();
 }
 
 function alignButtons() {
-	singleBtn.x = w / 2 - singleBtn.w / 2 - 100 * RS_X;
-	multiBtn.x = w / 2 - multiBtn.w / 2 + 100 * RS_X;
 	playBtn.x = w / 2 - playBtn.w / 2;
+	multiBtn.x = w / 2 - multiBtn.w / 2 + 100 * RS_X;
+	singleBtn.x = w / 2 - singleBtn.w / 2 - 100 * RS_X;
+	MainMenuBtn.x = w / 2 - MainMenuBtn.w / 2 - 100 * RS_X;
+	playAgainBtn.x = w / 2 - playAgainBtn.w / 2 + 100 * RS_X;
 
-	singleBtn.y = h - 250 * RS_Y;
-	multiBtn.y = h - 250 * RS_Y;
 	playBtn.y = h - 150 * RS_Y;
+	multiBtn.y = h - 250 * RS_Y;
+	singleBtn.y = h - 250 * RS_Y;
+	MainMenuBtn.y = h - 250 * RS_Y;
+	playAgainBtn.y = h - 250 * RS_Y;
 }
 
 /* Logic per keypress */
 function keyPressed() {
 	if (twoPlayer && (key == 'w' || key == 'W')) player1.goUp();
 	if (twoPlayer && (key == 's' || key == 'S')) player1.down();
-	if (keyCode == ENTER) mode = 1;
 	if (keyCode == UP_ARROW) player2.goUp();
 	if (keyCode == DOWN_ARROW) player2.down();
 }
 
 /* Logic per key release */
 function keyReleased() {
-	if (twoPlayer && (key.toLowerCase() == 'w' || key.toLowerCase() == 's'))
-		player1.stop();
+	let releasedKey = key.toLowerCase();
+	if (twoPlayer && (releasedKey == 'w' || releasedKey == 's')) player1.stop();
 	if (keyCode == UP_ARROW || keyCode == DOWN_ARROW) player2.stop();
 }
 
 function mousePressed() {
-	this.playBtn.clicked();
-	this.multiBtn.clicked();
-	this.singleBtn.clicked();
+	playBtn.clicked();
+	multiBtn.clicked();
+	singleBtn.clicked();
+	MainMenuBtn.clicked();
+	playAgainBtn.clicked();
 }

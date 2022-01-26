@@ -9,8 +9,10 @@ class Ball {
 
 	/* display petres ball */
 	show() {
+		push();
 		imageMode(CENTER);
 		image(petresBall, this.pos.x, this.pos.y, this.r, this.r);
+		pop();
 	}
 
 	/* move ball based on speed and acceleration angle */
