@@ -1,21 +1,18 @@
 class Button {
-	constructor(l, bW, bH, p) {
+	constructor(l) {
 		this.l = l;
 		this.selected = false;
 	}
 
 	select = () => (this.selected = true);
 	unSelect = () => (this.selected = false);
+	clicked = () => this.intersect() && (this.selected = !this.selected);
 
 	intersect = () =>
 		mouseX >= this.x &&
 		mouseX <= this.x + this.w &&
 		mouseY >= this.y &&
 		mouseY <= this.y + this.h;
-
-	clicked() {
-		if (this.intersect()) this.selected = !this.selected;
-	}
 
 	update(w, h, p) {
 		this.x = p.x;

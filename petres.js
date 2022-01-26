@@ -17,7 +17,7 @@ let fillColor = 255;
 let btnW = 150;
 let btnH = 50;
 
-const ROUNDS = 1;
+const ROUNDS = 10;
 const BALL_SPEED = 5;
 
 /* setup image */
