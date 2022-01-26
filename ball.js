@@ -1,7 +1,7 @@
 class Ball {
 	constructor(p = p5.instance) {
 		this.acc = this.randomAngle();
-		this.r = 60 * RELATIVE_SCALE_X;
+		this.r = 60 * RS_X;
 		this.speed = createVector(5, 5);
 		this.maxSpeed = createVector(15, 12);
 		this.pos = createVector(width / 2, height / 2);
@@ -15,9 +15,9 @@ class Ball {
 
 	/* move ball based on speed and acceleration angle */
 	move() {
-		this.r = 60 * RELATIVE_SCALE_X;
-		this.pos.x += this.speed.x * this.acc.x * RELATIVE_SCALE_X;
-		this.pos.y += this.speed.y * this.acc.y * RELATIVE_SCALE_Y;
+		this.r = 60 * RS_X;
+		this.pos.x += this.speed.x * this.acc.x * RS_X;
+		this.pos.y += this.speed.y * this.acc.y * RS_Y;
 	}
 
 	/* generate an angle between a restricted area */
