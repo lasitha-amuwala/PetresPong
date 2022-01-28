@@ -16,7 +16,8 @@ The original was made using Prosessing and fairly simple code, I've made some im
 - AI for single player
 - Responsive UI
 - Nice UI
-- hosted on Githup Pages
+- Hosted on Githup Pages
+- Added sound effects
 
 ## Single-player Controls:
 
