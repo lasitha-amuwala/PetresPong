@@ -2,23 +2,20 @@ let w, h;
 let sounds;
 let winner;
 let petresBall;
+
 let RS_X; // Relative Scale X
 let RS_Y; // Relative Scale Y
-let paddleH, paddleW;
-let p1PosX, p2PosX, pPosY;
-let ball, player1, player2;
 
+let ball, player1, player2;
 let playBtn, singleBtn, multiBtn;
 
 let mode = 0;
 let twoPlayer = false;
-let fillColor = 255;
 
-let btnW = 150;
-let btnH = 50;
+let buttonWidth = 150;
+let buttonHeight = 50;
 
-const ROUNDS = 1;
-const BALL_SPEED = 5;
+const ROUNDS = 3;
 
 let sound = false;
 
@@ -36,17 +33,12 @@ function preload() {
 function setup() {
 	// create canvas and initialize players
 	centerCanvas();
-
-	p1PosX = 25 * RS_Y;
-	p2PosX = w - 25 * RS_Y;
-	pPosY = h / 2 - paddleH / 2;
-
 	// create Ball
 	ball = new Ball();
 
 	// create Players
-	player1 = new Player(p1PosX);
-	player2 = new Player(p2PosX);
+	player1 = new Player('Player 1');
+	player2 = new Player('Player 2');
 
 	// create Buttons
 	playBtn = new Button('Play');
@@ -80,23 +72,11 @@ function centerCanvas() {
 	// relative scale based on resolution of screem
 	RS_X = w / 1211;
 	RS_Y = h / 655.5;
-
-	// paddle width and heights
-	paddleH = h / 6;
-	paddleW = 5 * RS_X;
 }
 
 /* recreate canvas when page resized*/
 function windowResized() {
 	centerCanvas();
-	// reset paddle position on window resize and adjust dimentions
-	player1.w = paddleW;
-	player1.h = paddleH;
-	player2.w = paddleW;
-	player2.h = paddleH;
-	player1.pos = createVector(25 * RS_Y, h / 2 - paddleH / 2);
-	player2.pos = createVector(w - 25 * RS_Y, h / 2 - paddleH / 2);
-
 	updateObjects();
 }
 
@@ -126,14 +106,6 @@ function drawStartScreen() {
 	text('Petres Pong', w / 2, h / 2 - 25 * RS_Y);
 	pop();
 
-	if (twoPlayer) {
-		singleBtn.unSelect();
-		multiBtn.select();
-	} else {
-		singleBtn.select();
-		multiBtn.unSelect();
-	}
-
 	if (playBtn.selected) mode = 1;
 
 	playBtn.show();
@@ -145,6 +117,7 @@ function drawStartScreen() {
 function drawGameScreen() {
 	mainMenuBtn.unSelect();
 	playAgainBtn.unSelect();
+
 	// Draw net and score board
 	drawField();
 
@@ -153,11 +126,8 @@ function drawGameScreen() {
 	player2.show();
 
 	// Draw player 2 paddle
-	player1.update();
-	player2.update();
-
-	// If two player is disabled enable AI
-	!twoPlayer && AI();
+	player1.move();
+	player2.move();
 
 	// Draw ball
 	ball.show();
@@ -165,6 +135,9 @@ function drawGameScreen() {
 
 	ball.paddleCollision(player1, 0);
 	ball.paddleCollision(player2, 1);
+
+	// If two player is disabled enable AI
+	!twoPlayer && AI();
 
 	// Increment player scores
 	let score = ball.edges();
@@ -194,12 +167,10 @@ function drawEndScreen() {
 	text(winner, w / 2, h / 2);
 	pop();
 
-	// reset players
-	player1.score = 0;
-	player2.score = 0;
-	player1.pos = createVector(p1PosX, pPosY);
-	player2.pos = createVector(p2PosX, pPosY);
-	ball.speed = createVector(BALL_SPEED, BALL_SPEED);
+	// reset
+	ball.reset();
+	player1.reset();
+	player2.reset();
 
 	mainMenuBtn.show();
 	playAgainBtn.show();
@@ -211,6 +182,7 @@ function drawEndScreen() {
 function AI() {
 	let ballY = ball.pos.y;
 	let paddleY = player1.pos.y;
+	let paddleH = player1.h;
 
 	if (ball.pos.x < w / 2 && ball.acc.x < 0) {
 		ballY < paddleY + paddleH / 2 ? player1.goUp() : player1.down();
@@ -243,21 +215,27 @@ function drawField() {
 
 /* update objects position and size */
 function updateObjects() {
-	let newBtnH = btnH * RS_Y;
-	let newBtnW = btnW * RS_X;
-	let BtnY = h - 250 * RS_Y;
+	// calculate button position and dimensions
+	let btnW = buttonWidth * RS_X;
+	let btnH = buttonHeight * RS_Y;
+	let btnY = h - 250 * RS_Y;
+	let btnCenter = w / 2 - btnW / 2;
 
-	playBtnPos = createVector(w / 2 - newBtnW / 2, h - 150 * RS_Y);
-	multiBtnPos = createVector(w / 2 - newBtnW / 2 + 100 * RS_X, BtnY);
-	singleBtnPos = createVector(w / 2 - newBtnW / 2 - 100 * RS_X, BtnY);
-	mainMenuBtnPos = createVector(w / 2 - newBtnW / 2 - 100 * RS_X, BtnY);
-	playAgainBtnPos = createVector(w / 2 - newBtnW / 2 + 100 * RS_X, BtnY);
+	// calculate paddle position and dimensions
+	let paddleH = 120 * RS_Y;
+	let paddleW = 5 * RS_X;
+	let paddleCenter = h / 2 - paddleH / 2;
 
-	playBtn.update(newBtnW, newBtnH, playBtnPos);
-	multiBtn.update(newBtnW, newBtnH, multiBtnPos);
-	singleBtn.update(newBtnW, newBtnH, singleBtnPos);
-	mainMenuBtn.update(newBtnW, newBtnH, mainMenuBtnPos);
-	playAgainBtn.update(newBtnW, newBtnH, playAgainBtnPos);
+	// update buttons
+	playBtn.update(btnW, btnH, btnCenter, h - 150 * RS_Y);
+	multiBtn.update(btnW, btnH, btnCenter + 100 * RS_X, btnY);
+	singleBtn.update(btnW, btnH, btnCenter - 100 * RS_X, btnY);
+	mainMenuBtn.update(btnW, btnH, btnCenter - 100 * RS_X, btnY);
+	playAgainBtn.update(btnW, btnH, btnCenter + 100 * RS_X, btnY);
+
+	// update players
+	player1.update(paddleW, paddleH, createVector(25 * RS_Y, paddleCenter));
+	player2.update(paddleW, paddleH, createVector(w - 25 * RS_Y, paddleCenter));
 }
 
 /* Logic per keypress */

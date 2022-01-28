@@ -1,5 +1,13 @@
 class Ball {
-	constructor(p = p5.instance) {
+	constructor() {
+		this.init();
+	}
+
+	/* reset ball */
+	reset = () => this.init();
+
+	/* initialize */
+	init() {
 		this.acc = this.randomAngle();
 		this.r = 60 * RS_X;
 		this.speed = createVector(5, 5);
