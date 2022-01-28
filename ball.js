@@ -34,14 +34,14 @@ class Ball {
 		// invert vertical acceleration when ball collides with floor or ceiling
 		if (this.pos.y <= this.r / 2 || this.pos.y >= height - this.r / 2) {
 			this.acc.y = -this.acc.y;
-			sounds.wallSound.play();
+			sound && sounds.wallSound.play();
 		}
 
 		// when ball collides with left or right wall
 		if (this.pos.x <= -10 || this.pos.x >= width + 10) {
 			let currPos = this.pos.x;
 
-			sounds.goalSound.play();
+			sound && sounds.goalSound.play();
 			// reset ball position and angle
 			this.acc = this.randomAngle();
 			this.pos = createVector(width / 2, height / 2);
@@ -83,7 +83,7 @@ class Ball {
 				this.speed = createVector(this.speed.x + 0.5, this.speed.y + 0.5);
 
 			// play sound when ball hits the paddle
-			sounds.paddleSound.play();
+			sound && sounds.paddleSound.play();
 		}
 	}
 }

@@ -17,8 +17,10 @@ let fillColor = 255;
 let btnW = 150;
 let btnH = 50;
 
-const ROUNDS = 10;
+const ROUNDS = 1;
 const BALL_SPEED = 5;
+
+let sound = false;
 
 /* setup image */
 function preload() {
@@ -239,6 +241,7 @@ function drawField() {
 	pop();
 }
 
+/* update objects position and size */
 function updateObjects() {
 	let newBtnH = btnH * RS_Y;
 	let newBtnW = btnW * RS_X;
@@ -272,18 +275,11 @@ function keyReleased() {
 	if (keyCode == UP_ARROW || keyCode == DOWN_ARROW) player2.stop();
 }
 
+/* Logic for when mouse pressed */
 function mousePressed() {
 	playBtn.clicked();
 	multiBtn.clicked();
 	singleBtn.clicked();
 	mainMenuBtn.clicked();
 	playAgainBtn.clicked();
-}
-
-function deviceTurned() {
-	if (value === 0) {
-		value = 255;
-	} else if (value === 255) {
-		value = 0;
-	}
 }
