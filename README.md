@@ -10,12 +10,12 @@ I've made some imporvements since then.
 - Menu screens
 - Interactive buttons 
 - Score board
-- 2 modes: singleplayer and multiplayer
+- 2 modes: single-player and multiplayer
 - AI for single player
 - Responsive UI
 - Nice UI
 
-## Singleplayer Controls:
+## Single-player Controls:
 
 - use <kbd>&#8593;</kbd> to move up
 - use <kbd>&#8595;</kbd> to move down
