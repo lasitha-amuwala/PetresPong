@@ -14,9 +14,9 @@ class Button {
 		mouseY >= this.y &&
 		mouseY <= this.y + this.h;
 
-	update(w, h, p) {
-		this.x = p.x;
-		this.y = p.y;
+	update(w, h, x, y) {
+		this.x = x;
+		this.y = y;
 		this.w = w;
 		this.h = h;
 	}
