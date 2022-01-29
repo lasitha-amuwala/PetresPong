@@ -1,4 +1,5 @@
-let w, h;
+let w;
+let h;
 let sounds;
 let winner;
 let petresBall;
@@ -6,18 +7,19 @@ let petresBall;
 let RS_X; // Relative Scale X
 let RS_Y; // Relative Scale Y
 
-let ball, player1, player2;
-let playBtn, singleBtn, multiBtn;
+let ball;
+let player1;
+let player2;
+let playBtn;
+let singleBtn;
+let multiBtn;
+let buttons;
 
 let mode = 0;
+let sound = true;
 let twoPlayer = false;
 
-let buttonWidth = 150;
-let buttonHeight = 50;
-
 const ROUNDS = 3;
-
-let sound = false;
 
 /* setup image */
 function preload() {
@@ -46,6 +48,11 @@ function setup() {
 	singleBtn = new Button('Singleplayer');
 	mainMenuBtn = new Button('Main Menu');
 	playAgainBtn = new Button('Play Again');
+
+	buttons = [playBtn, multiBtn, singleBtn, mainMenuBtn, playAgainBtn];
+
+	singleBtn.select();
+	singleBtn.disable();
 
 	updateObjects();
 
@@ -106,6 +113,20 @@ function drawStartScreen() {
 	text('Petres Pong', w / 2, h / 2 - 25 * RS_Y);
 	pop();
 
+	if (singleBtn.disabled && multiBtn.selected) {
+		multiBtn.disable();
+		singleBtn.enable();
+		singleBtn.deselect();
+		twoPlayer = true;
+	}
+
+	if (multiBtn.disabled && singleBtn.selected) {
+		singleBtn.disable();
+		multiBtn.enable();
+		multiBtn.deselect();
+		twoPlayer = false;
+	}
+
 	if (playBtn.selected) mode = 1;
 
 	playBtn.show();
@@ -115,8 +136,8 @@ function drawStartScreen() {
 
 /* Display Game */
 function drawGameScreen() {
-	mainMenuBtn.unSelect();
-	playAgainBtn.unSelect();
+	mainMenuBtn.deselect();
+	playAgainBtn.deselect();
 
 	// Draw net and score board
 	drawField();
@@ -149,7 +170,7 @@ function drawGameScreen() {
 
 /* Display End Menu */
 function drawEndScreen() {
-	playBtn.unSelect();
+	playBtn.deselect();
 
 	// determine winner, and display winner
 	if (player1.score != 0 || player2.score != 0) {
@@ -171,6 +192,9 @@ function drawEndScreen() {
 	ball.reset();
 	player1.reset();
 	player2.reset();
+	
+	// reset position of paddles
+	updateObjects();
 
 	mainMenuBtn.show();
 	playAgainBtn.show();
@@ -216,8 +240,8 @@ function drawField() {
 /* update objects position and size */
 function updateObjects() {
 	// calculate button position and dimensions
-	let btnW = buttonWidth * RS_X;
-	let btnH = buttonHeight * RS_Y;
+	let btnW = 150 * RS_X;
+	let btnH = 50 * RS_Y;
 	let btnY = h - 250 * RS_Y;
 	let btnCenter = w / 2 - btnW / 2;
 
@@ -240,24 +264,25 @@ function updateObjects() {
 
 /* Logic per keypress */
 function keyPressed() {
-	if (twoPlayer && (key == 'w' || key == 'W')) player1.goUp();
-	if (twoPlayer && (key == 's' || key == 'S')) player1.down();
 	if (keyCode == UP_ARROW) player2.goUp();
 	if (keyCode == DOWN_ARROW) player2.down();
+	if (twoPlayer && (key == 'w' || key == 'W')) player1.goUp();
+	if (twoPlayer && (key == 's' || key == 'S')) player1.down();
 }
 
 /* Logic per key release */
 function keyReleased() {
 	let releasedKey = key.toLowerCase();
-	if (twoPlayer && (releasedKey == 'w' || releasedKey == 's')) player1.stop();
 	if (keyCode == UP_ARROW || keyCode == DOWN_ARROW) player2.stop();
+	if (twoPlayer && (releasedKey == 'w' || releasedKey == 's')) player1.stop();
 }
 
 /* Logic for when mouse pressed */
 function mousePressed() {
-	playBtn.clicked();
-	multiBtn.clicked();
-	singleBtn.clicked();
-	mainMenuBtn.clicked();
-	playAgainBtn.clicked();
+	buttons.forEach((button) => button.clicked());
 }
+/*
+function handleCursor() {
+	buttons.forEach((button) => button.intersect()? cursor(HAND) : cursor(ARROW));
+}
+*/

@@ -2,11 +2,17 @@ class Button {
 	constructor(l) {
 		this.l = l;
 		this.selected = false;
+		this.disabled = false;
 	}
 
-	select = () => (this.selected = true);
-	unSelect = () => (this.selected = false);
-	clicked = () => this.intersect() && (this.selected = !this.selected);
+	select = () => !this.disabled && (this.selected = true);
+	deselect = () => !this.disabled && (this.selected = false);
+	enable = () => this.disabled && (this.disabled = false);
+	disable = () => !this.disabled && (this.disabled = true);
+
+	clicked() {
+		!this.disabled && this.intersect() && (this.selected = !this.selected);
+	}
 
 	intersect = () =>
 		mouseX >= this.x &&
