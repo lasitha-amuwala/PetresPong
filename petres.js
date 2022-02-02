@@ -19,9 +19,9 @@ let mode = 0;
 let sound = true;
 let twoPlayer = false;
 
-const ROUNDS = 3;
+const ROUNDS = 10;
 
-/* setup image */
+/** setup image */
 function preload() {
 	petresBall = loadImage('assets/petres-ball.png');
 	sounds = {
@@ -31,7 +31,7 @@ function preload() {
 	};
 }
 
-/* setup canvas */
+/** setup canvas */
 function setup() {
 	// create canvas and initialize players
 	centerCanvas();
@@ -59,7 +59,7 @@ function setup() {
 	if (!twoPlayer) player1.maxSpd = 8 * RS_X;
 }
 
-/* Create game canvas in center of page */
+/** Create game canvas in center of page */
 function centerCanvas() {
 	// calculate canvas size to be in the center
 	let winWidth = windowHeight - 100;
@@ -95,7 +95,7 @@ function draw() {
 	else drawEndScreen();
 }
 
-/* Display Start Menu */
+/** Display Start Menu */
 function drawStartScreen() {
 	let imgSize = 100 * RS_X;
 
@@ -134,7 +134,7 @@ function drawStartScreen() {
 	singleBtn.show();
 }
 
-/* Display Game */
+/** Display Game */
 function drawGameScreen() {
 	mainMenuBtn.deselect();
 	playAgainBtn.deselect();
@@ -168,8 +168,10 @@ function drawGameScreen() {
 	if (player1.score >= ROUNDS || player2.score >= ROUNDS) mode = 2;
 }
 
-/* Display End Menu */
+/** Display End Menu */
 function drawEndScreen() {
+
+	
 	playBtn.deselect();
 
 	// determine winner, and display winner
@@ -203,6 +205,7 @@ function drawEndScreen() {
 	if (mainMenuBtn.selected) mode = 0;
 }
 
+/** Compute AI for paddle 1 in single player */
 function AI() {
 	let ballY = ball.pos.y;
 	let paddleY = player1.pos.y;
@@ -221,7 +224,7 @@ function AI() {
 	}
 }
 
-/* Display field */
+/** Display field */
 function drawField() {
 	push();
 	stroke(255);
@@ -237,7 +240,7 @@ function drawField() {
 	pop();
 }
 
-/* update objects position and size */
+/** update objects position and size */
 function updateObjects() {
 	// calculate button position and dimensions
 	let btnW = 150 * RS_X;
@@ -262,7 +265,7 @@ function updateObjects() {
 	player2.update(paddleW, paddleH, createVector(w - 25 * RS_Y, paddleCenter));
 }
 
-/* Logic per keypress */
+/** Logic per keypress */
 function keyPressed() {
 	if (keyCode == UP_ARROW) player2.goUp();
 	if (keyCode == DOWN_ARROW) player2.down();
@@ -270,14 +273,14 @@ function keyPressed() {
 	if (twoPlayer && (key == 's' || key == 'S')) player1.down();
 }
 
-/* Logic per key release */
+/** Logic per key release */
 function keyReleased() {
 	let releasedKey = key.toLowerCase();
 	if (keyCode == UP_ARROW || keyCode == DOWN_ARROW) player2.stop();
 	if (twoPlayer && (releasedKey == 'w' || releasedKey == 's')) player1.stop();
 }
 
-/* Logic for when mouse pressed */
+/** Logic for when mouse pressed */
 function mousePressed() {
 	buttons.forEach((button) => button.clicked());
 }
